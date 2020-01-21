@@ -26,6 +26,8 @@ TARGET=main
 
 include libs/spiffs/spiffs.mk
 
+default: all
+
 $(OBJ_DIR)/%.o:  
 	$(CC) $(CPPFLAGS) -c -o $@ $(filter %/$(strip $(patsubst %.o, %.cpp, $(notdir $@))), $(SRC_FILES))
 
