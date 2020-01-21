@@ -26,24 +26,30 @@ TARGET=main
 
 include libs/spiffs/spiffs.mk
 
+.PHONY: default
 default: all
 
 $(OBJ_DIR)/%.o:  
 	$(CC) $(CPPFLAGS) -c -o $@ $(filter %/$(strip $(patsubst %.o, %.cpp, $(notdir $@))), $(SRC_FILES))
 
-all:  $(SPIFFS_OBJ) $(OBJ_FILES) $(LIBS)
+.PHONY: all
+all: $(SPIFFS_OBJ) $(OBJ_FILES) $(LIBS)
 	$(CC) -o $(TARGET) $^ $(LDFLAGS)
 
 include libs/mbedtls/mbedtls.mk
 
+.PHONY: clean
 clean:
 	$(RM) $(OBJ_FILES) $(DEP_FILES) $(TARGET) $(MBEDTLS_OBJ) $(MBEDTLS_A) $(SPIFFS_OBJ)
 	
+.PHONY: testpy
 testpy:
 	#cd ./pytest
 	cd ~/solo/gnuk/tests; py.test-3 -x
 
+.PHONY: testc
 testc:
 	cd ./gtest; make clean; make all; ./ptest
 
+.PHONY: testall
 testall: testc testpy
